@@ -9,22 +9,42 @@ function displayProduct (){
     .then(response => response.json())
     .then(product => {
         JSON.stringify(product);
-            const imgProd = document.querySelector('.item__img');
+            let imgProd = document.querySelector('.item__img');
+            let titleProd = document.getElementById('title');
+            let priceProd = document.getElementById('price');
+            let descriptionProd = document.getElementById('description');
+            let listeColorsProd = document.getElementById('colors');
+            let colorsProd = product.colors;
+
             imgProd.innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`
-            const titleProd = document.getElementById('title');
             titleProd.textContent = product.name;
-            const priceProd = document.getElementById('price');
             priceProd.textContent = product.price;
-            const descriptionProd = document.getElementById('description');
             descriptionProd.textContent = product.description;
-            const listeColorsProd = document.getElementById('colors');
-            const colorsProd = product.colors;
             colorsProd.forEach(color=> {
-                const colorOption = document.createElement('option');
+                let colorOption = document.createElement('option');
                 colorOption.textContent = color ;
                 listeColorsProd.appendChild(colorOption)
-            })
-
-    })
+            });
+    });
 }
 displayProduct();
+
+
+function addProductToCart () {
+    addToCart.onclick = () => {
+        var userChoice = [];
+        var selectProd = {
+                quantity: quantity.value,
+                colors: colors.value,
+                id: idURL
+            };
+        console.log(userChoice);
+        console.log(selectProd);
+        var existingSelectProd = JSON.parse(localStorage.getItem("userChoice"));
+        if(existingSelectProd== null) existingSelectProd = [];
+        localStorage.setItem("selectProd", JSON.stringify(selectProd));
+        existingSelectProd.push(selectProd);
+        localStorage.setItem("userChoice", JSON.stringify(existingSelectProd));
+    };
+};
+addProductToCart();
