@@ -1,6 +1,6 @@
 // Requête API <-> Affiche tous les produits sur la page d'accueil
 function displayProdHome(){
-    const baseURL ='http://localhost:3000/api/products'
+    let baseURL ='http://localhost:3000/api/products'
     fetch(baseURL)
     .then(response => response.json())
     .then(products => {
