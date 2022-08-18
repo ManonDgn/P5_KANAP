@@ -30,34 +30,37 @@ function displayProduct (){
 displayProduct();
 //
 
-// Variable bouton
+// Variable bouton et déclenchement fonction au clic
 let buttonAddToCart = document.getElementById('addToCart');
 buttonAddToCart.addEventListener('click', addProdToCart);
 
 // FONCTION D'AJOUT AU PANIER
 
-// si panier vide
-    // ajoute le produit au panier
-// si panier n'est pas vide
-    // pour chaque produit du panier
-        // si le produit existe déjà (id et couleur)
-            // ajoute la nouvelle quantité
-        // enregistre la nouvelle quantité dans panier
-    // si le produit est différent du produit existant
-        // ajoute le produit dans le panier
-
 
 function addProdToCart (){
+// variables de l'objet produit
     let productQty = parseInt(document.getElementById('quantity').value);
     let productColor = document.getElementById('colors').value;
+// objet produit
     let productOn = {productColor, productQty, idURL};
+// panier sauvegardé
     let savedCart = JSON.parse(localStorage.getItem("cart"));
+// panier
     let cart = [];
 
+// si panier vide
+// ajoute le produit au panier
     if (savedCart == null || savedCart.length == 0) {
         cart.push(productOn);
         localStorage.setItem('cart', JSON.stringify(cart));
     }
+// si panier n'est pas vide
+// pour chaque produit du panier
+    // si le produit existe déjà (id et couleur)
+        // ajoute la nouvelle quantité
+    // enregistre la nouvelle quantité dans panier
+    // si le produit est différent du produit existant
+        // ajoute le produit dans le panier
     else {
         let productExist = false;
         for (let i = 0 ; i < savedCart.length ; i++) {
