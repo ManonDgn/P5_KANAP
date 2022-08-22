@@ -1,4 +1,4 @@
-// Requête API <-> Affiche tous les produits sur la page d'accueil
+// -- Requête API <-> Affiche tous les produits sur la page d'accueil
 function displayProdHome(){
     let baseURL ='http://localhost:3000/api/products'
     fetch(baseURL)
