@@ -37,7 +37,6 @@ let buttonAddToCart = document.getElementById('addToCart');
 buttonAddToCart.addEventListener('click', addProdToCart);
 
 // -- Fonction d'ajout des produits au panier
-
 function addProdToCart (){
 // variables de l'objet produit
     let productQty = parseInt(document.getElementById('quantity').value);

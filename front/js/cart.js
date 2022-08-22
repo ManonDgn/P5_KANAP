@@ -61,7 +61,7 @@ displayCart ();
 function calcTotalToPay () {
   let cart = getCartLocal();
   let totalToPay = 0;
-  let totalByItem = 0;
+  let itemQty = 0;
   for (let productOn of cart) {
     let prodURL ='http://localhost:3000/api/products/' + productOn.idURL;
     fetch(prodURL)
@@ -70,6 +70,10 @@ function calcTotalToPay () {
       totalToPay += productOn.productQty * product.price;
       let totalItemPrice = document.getElementById("totalPrice");
       totalItemPrice.textContent = totalToPay;
+
+      let itemQtyItem = document.getElementById("totalQuantity");
+      itemQty += productOn.productQty ;
+      itemQtyItem.textContent = itemQty;
     });
   }
 }
@@ -85,6 +89,48 @@ let contact = {
   city:"",
   email: ""
 };
+
+
+
+
+
+
+
+
+// Regex formulaire
+let formUser = document.querySelector('.cart__order__form');
+
+
+// // Vérification email
+formUser.email.addEventListener ('change',function(){
+  validEmail(this)
+});
+const validEmail = function (inputEmail) {
+  // Fonction validation email - regex
+  let regexEmail = new RegExp (/^[a-zA-Z0-9_.-]+@[a-z0-9]{2,}\.[a-z]{2,}$/);
+  // Récupération de la balise error
+  let messageError = document.getElementById('emailErrorMsg');
+  // Test de la regex email
+  if (regexEmail.test(inputEmail.value)) {
+  messageError.innerHTML = "Valide"
+  }
+  else {
+  messageError.innerHTML = "Non Valide"
+  }
+};
+  
+
+
+
+let regexText = /^[a-zA-Z]/;
+
+
+
+let textInput = document.querySelector('input[type="text"]');
+let emailInput = document.querySelector('input[type="email"]');
+
+
+
 
 // -- Suppression d'un article via l'ID et couleur
 
