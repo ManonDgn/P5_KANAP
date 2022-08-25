@@ -16,7 +16,10 @@ if (isCartEmpty) {
     })
   })
 }
-//
+
+
+// ---------- Fonctions du panier
+// -- Affichage des produits
 function displayProduct (product, productColor, productQty){
   const productEl = document.createElement('article');
     productEl.classList.add('cart__item');
@@ -47,7 +50,6 @@ function displayProduct (product, productColor, productQty){
     
 };
 
-
 // -- Calcul des prix totaux
 function calcTotalToPay () {
   let totalToPay = 0;
@@ -68,7 +70,7 @@ function calcTotalToPay () {
 }
 calcTotalToPay();
 
-
+// -- Modification quantité du produit
 function setQty(e) {
   let curInput = e.target;
   let newQty = curInput.value;
@@ -80,7 +82,7 @@ function setQty(e) {
   refreshCart();
 }
 
-
+// -- Suppression du produit
 function deleteProduct(e) {
   let btn = e.target;
   let closestArticle = btn.closest("article");
@@ -89,13 +91,13 @@ function deleteProduct(e) {
   refreshCart();
   closestArticle.remove();
 };
-
+// -- Rafraîchir le panier et la page
 function refreshCart () {
   localStorage.setItem('cart', JSON.stringify(cart)); 
   calcTotalToPay();
   location.reload();
 };
-
+// -- Récupérer les produits du panier via leur index
 function getProductIndex(articleId) {
   return cart.findIndex(item => item.idURL == articleId)
 }
@@ -115,11 +117,69 @@ let contact = {
 };
 
 
-// Regex formulaire
+// Déclaration de la variable formulaire
 let formUser = document.querySelector('.cart__order__form');
 
+//--// Vérification champs texte
+////// FIRST NAME
+formUser.firstName.addEventListener ('change',function(){
+  validFirstName(this)
+});
+const validFirstName = function (inputFirstName) {
+   // Fonction validation texte - regex
+   let regexText = new RegExp (/^[a-zA-Z]/);
+   let messageError = document.getElementById('firstNameErrorMsg');
+   if (regexText.test(inputFirstName.value)) {
 
-// // Vérification email
+    }
+    else {
+    messageError.innerHTML = "Invalide";
+    }
+};
+////// LAST NAME
+formUser.lastName.addEventListener ('change',function(){
+  validLastName(this)
+});
+const validLastName = function (inputLastName) {
+   // Fonction validation texte - regex
+   let regexText = /^[a-zA-Z]/;
+   let messageError = document.getElementById('lastNameErrorMsg');
+   if (regexText.test(inputLastName.value)) {
+    }
+    else {
+    messageError.innerHTML = "Invalide";
+    }
+};
+////// ADRESS
+formUser.address.addEventListener ('change',function(){
+  validAddress(this)
+});
+const validAddress = function (inputAddress) {
+   // Fonction validation texte - regex
+   let regexAddress = new RegExp (/^[a-zA-Z0-9\s,'-]*$/);
+   let messageError = document.getElementById('addressErrorMsg');
+   if (regexText.test(inputAddress.value)) {
+    }
+    else {
+    messageError.innerHTML = "Invalide";
+    }
+};
+////// CITY
+formUser.city.addEventListener ('change',function(){
+  validCity(this)
+});
+const validCity = function (inputCity) {
+   // Fonction validation texte - regex
+   let regexText = /^[a-zA-Z]/;
+   let messageError = document.getElementById('cityErrorMsg');
+   if (regexText.test(inputCity.value)) {
+    }
+    else {
+    messageError.innerHTML = "Invalide";
+    }
+};
+
+//--// Vérification champ email
 formUser.email.addEventListener ('change',function(){
   validEmail(this)
 });
@@ -130,19 +190,10 @@ const validEmail = function (inputEmail) {
   let messageError = document.getElementById('emailErrorMsg');
   // Test de la regex email
   if (regexEmail.test(inputEmail.value)) {
-  messageError.innerHTML = "Valide"
   }
   else {
-  messageError.innerHTML = "Non Valide"
+  messageError.innerHTML = "Adresse e-mail non valide"
   }
 };
-  
-
-let regexText = /^[a-zA-Z]/;
-
-
-
-let textInput = document.querySelector('input[type="text"]');
-let emailInput = document.querySelector('input[type="email"]');
 
 
