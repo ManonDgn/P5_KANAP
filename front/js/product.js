@@ -1,7 +1,7 @@
 // -- Récupération de l'URL ID Produit
 const currentUrl = new URL (document.URL);
-const idURL = currentUrl.searchParams.get('id');
-const idProductURL = 'http://localhost:3000/api/products/' + idURL ;
+const _id = currentUrl.searchParams.get('id');
+const idProductURL = 'http://localhost:3000/api/products/' + _id ;
 
 // -- Fonction d'affichage des produits selon leur ID
 function displayProduct (){
@@ -41,7 +41,7 @@ function addProdToCart (){
     let productQty = parseInt(document.getElementById('quantity').value);
     let productColor = document.getElementById('colors').value;
 // objet produit
-    let productOn = {productColor, productQty, idURL};
+    let productOn = {productColor, productQty, _id};
 // panier sauvegardé
     let savedCart = JSON.parse(localStorage.getItem("cart"));
 // panier
@@ -69,7 +69,7 @@ function addProdToCart (){
         else {
             let productExist = false;
             for (let i = 0 ; i < savedCart.length ; i++) {
-                if (savedCart[i].idURL == productOn.idURL && savedCart[i].productColor == productOn.productColor) {
+                if (savedCart[i]._id == productOn._id && savedCart[i].productColor == productOn.productColor) {
                     productExist = true;
                     savedCart[i].productQty = parseInt(productOn.productQty) + parseInt(savedCart[i].productQty);
                 }

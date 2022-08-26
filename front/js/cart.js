@@ -1,13 +1,10 @@
-// ------- Afficher panier, modif/suppr qté-item, calcul prix totaux + méthode remove, formulaire (vérif des champs) + POST
-// ------- Check expressions régulières
-
 const cart = JSON.parse(localStorage.getItem("cart"));
 let isCartEmpty = (cart == null || cart.length == 0) ? true : false;
 if (isCartEmpty) {
   console.log('Votre panier est vide');
 } else {
   cart.forEach((item) => {
-    const prodUrl = 'http://localhost:3000/api/products/' + item.idURL;
+    const prodUrl = 'http://localhost:3000/api/products/' + item._id;
     fetch(prodUrl)
     .then (res => res.json())
     .then (product => {
@@ -55,7 +52,7 @@ function calcTotalToPay () {
   let totalToPay = 0;
   let itemQty = 0;
   cart.forEach(item => {
-    fetch('http://localhost:3000/api/products/' + item.idURL)
+    fetch('http://localhost:3000/api/products/' + item._id)
     .then(response => response.json())
     .then(product => {
       totalToPay += item.productQty * product.price;
@@ -99,23 +96,13 @@ function refreshCart () {
 };
 // -- Récupérer les produits du panier via leur index
 function getProductIndex(articleId) {
-  return cart.findIndex(item => item.idURL == articleId)
+  return cart.findIndex(item => item._id == articleId)
 }
 
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-
-// requete POST formulaire + vérif des champs
-let contact = {
-  firstName: "",
-  lastName: "",
-  adresse: "",
-  city:"",
-  email: ""
-};
-
 
 // Déclaration de la variable formulaire
 let formUser = document.querySelector('.cart__order__form');
@@ -130,7 +117,7 @@ const validFirstName = function (inputFirstName) {
    let regexText = new RegExp (/^[a-zA-Z]/);
    let messageError = document.getElementById('firstNameErrorMsg');
    if (regexText.test(inputFirstName.value)) {
-
+    messageError.innerHTML = "Valide"
     }
     else {
     messageError.innerHTML = "Invalide";
@@ -145,6 +132,7 @@ const validLastName = function (inputLastName) {
    let regexText = /^[a-zA-Z]/;
    let messageError = document.getElementById('lastNameErrorMsg');
    if (regexText.test(inputLastName.value)) {
+    messageError.innerHTML = "Valide"
     }
     else {
     messageError.innerHTML = "Invalide";
@@ -156,9 +144,10 @@ formUser.address.addEventListener ('change',function(){
 });
 const validAddress = function (inputAddress) {
    // Fonction validation texte - regex
-   let regexAddress = new RegExp (/^[a-zA-Z0-9\s,'-]*$/);
+   let regexAddress = new RegExp (/^[a-zA-Z0-9\s]*$/);
    let messageError = document.getElementById('addressErrorMsg');
-   if (regexText.test(inputAddress.value)) {
+   if (regexAddress.test(inputAddress.value)) {
+    messageError.innerHTML = "Valide"
     }
     else {
     messageError.innerHTML = "Invalide";
@@ -173,13 +162,13 @@ const validCity = function (inputCity) {
    let regexText = /^[a-zA-Z]/;
    let messageError = document.getElementById('cityErrorMsg');
    if (regexText.test(inputCity.value)) {
+    messageError.innerHTML = "Valide"
     }
     else {
     messageError.innerHTML = "Invalide";
     }
 };
-
-//--// Vérification champ email
+////// EMAIL
 formUser.email.addEventListener ('change',function(){
   validEmail(this)
 });
@@ -190,6 +179,7 @@ const validEmail = function (inputEmail) {
   let messageError = document.getElementById('emailErrorMsg');
   // Test de la regex email
   if (regexEmail.test(inputEmail.value)) {
+    messageError.innerHTML = "Valide"
   }
   else {
   messageError.innerHTML = "Adresse e-mail non valide"
@@ -197,3 +187,107 @@ const validEmail = function (inputEmail) {
 };
 
 
+/////////////////// Formulaire
+
+function sendForm () {
+  formUser.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+/////////////////// Ajout du panier dans le tableau products
+    let productsOrder = [];
+    if (localStorage.getItem('cart')) {
+      let panier = JSON.parse(localStorage.getItem('cart'));
+      if (panier) {
+        panier.forEach((item) => {
+          if (item != null) {
+            productsOrder.push(item._id)
+          }
+        });
+      }
+    };
+/////////////////// Ajout du panier dans le tableau products
+    let contactObj = {
+      contact: {
+        firstName: formUser.firstName.value,
+        lastName: formUser.lastName.value,
+        address: formUser.address.value,
+        city: formUser.city.value,
+        email: formUser.email.value
+      },
+      products: productsOrder 
+    }
+    console.log(contactObj);
+
+    let orderOptions = {
+      method: 'POST',
+      body: JSON.stringify(contactObj),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+    fetch('http://localhost:3000/api/products/order', orderOptions)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      window.location.href = `/front/html/confirmation.html?orderId=${data.orderId}`;
+    })
+  })
+}
+sendForm();
+/*
+formUser.order.addEventListener ('click',function(e){
+  e.preventDefault();
+ submitForm();
+});
+
+async function submitForm () {
+  let customerName = document.getElementById('lastName').value;
+  let customerFirstName = document.getElementById('firstName').value;
+  let customerCity = document.getElementById('city').value;
+  let customerAddress = document.getElementById('address').value;
+  let customerEmail = document.getElementById('email').value;
+  let products = [];
+  let contactObj;
+  if (customerEmail && customerName) {
+    contactObj = {
+      firstName: customerFirstName,
+      lastName: customerName,
+      address: customerAddress,
+      city: customerCity,
+      email: customerEmail
+    }
+  };
+  if (localStorage.getItem('cart')) {
+    let panier = JSON.parse(localStorage.getItem('cart'));
+    if (panier) {
+      panier.forEach((item) => {
+        if (item != null) {
+          products.push(item._id)
+        }
+      });
+    }
+  };
+  const orderProducts = {
+    contactObj,
+    products
+  }
+  console.log('orderproducts', orderProducts);
+fetch('http://localhost:3000/api/products/order', {
+  method: "POST",
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({orderProducts})
+})
+.then((response) => {
+  if (response.ok) {
+    return response.json();
+
+  }
+})
+
+
+};
+
+*/
