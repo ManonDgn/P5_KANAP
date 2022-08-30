@@ -1,4 +1,7 @@
+// ------------------------ PANIER
+// -- Récupération <-> Données panier dans le localStorage 
 const cart = JSON.parse(localStorage.getItem("cart"));
+// -- Logique du panier <-> Panier vide // Panier rempli
 let isCartEmpty = (cart == null || cart.length == 0) ? true : false;
 if (isCartEmpty) {
   console.log('Votre panier est vide');
@@ -12,11 +15,10 @@ if (isCartEmpty) {
      calcTotalToPay (product.price, product.productQty);
     })
   })
-}
+};
 
-
-// ---------- Fonctions du panier
-// -- Affichage des produits
+// ------------------------ FONCTIONS DU PANIER
+// -- Fonction <-> Affichage des produits sur la page panier
 function displayProduct (product, productColor, productQty){
   const productEl = document.createElement('article');
     productEl.classList.add('cart__item');
@@ -47,7 +49,7 @@ function displayProduct (product, productColor, productQty){
     
 };
 
-// -- Calcul des prix totaux
+// -- Fonction <-> Calcul des prix totaux selon la quantité et le prix de chaque produit du panier
 function calcTotalToPay () {
   let totalToPay = 0;
   let itemQty = 0;
@@ -64,10 +66,10 @@ function calcTotalToPay () {
       itemQtyItem.textContent = itemQty;
     });
   });
-}
+};
 calcTotalToPay();
 
-// -- Modification quantité du produit
+// -- Fonction <-> Modification de la quantité de chaque produit du panier
 function setQty(e) {
   let curInput = e.target;
   let newQty = curInput.value;
@@ -77,9 +79,9 @@ function setQty(e) {
   curItem.productQty = parseInt(newQty);
   //2- Rafraichir le panier
   refreshCart();
-}
+};
 
-// -- Suppression du produit
+// -- Fonction <-> Suppression d'un produit du panier
 function deleteProduct(e) {
   let btn = e.target;
   let closestArticle = btn.closest("article");
@@ -88,206 +90,96 @@ function deleteProduct(e) {
   refreshCart();
   closestArticle.remove();
 };
-// -- Rafraîchir le panier et la page
+// -- Fonction <-> Recharger les données du panier et la page avec les modifications
 function refreshCart () {
   localStorage.setItem('cart', JSON.stringify(cart)); 
   calcTotalToPay();
   location.reload();
 };
-// -- Récupérer les produits du panier via leur index
+// -- Fonction <-> Récupérer les produits du panier via leur index
 function getProductIndex(articleId) {
   return cart.findIndex(item => item._id == articleId)
-}
-
-
-// ------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------
-
-// Déclaration de la variable formulaire
-let formUser = document.querySelector('.cart__order__form');
-
-//--// Vérification champs texte
-////// FIRST NAME
-formUser.firstName.addEventListener ('change',function(){
-  validFirstName(this)
-});
-const validFirstName = function (inputFirstName) {
-   // Fonction validation texte - regex
-   let regexText = new RegExp (/^[a-zA-Z]/);
-   let messageError = document.getElementById('firstNameErrorMsg');
-   if (regexText.test(inputFirstName.value)) {
-    messageError.innerHTML = "Valide"
-    }
-    else {
-    messageError.innerHTML = "Invalide";
-    }
-};
-////// LAST NAME
-formUser.lastName.addEventListener ('change',function(){
-  validLastName(this)
-});
-const validLastName = function (inputLastName) {
-   // Fonction validation texte - regex
-   let regexText = /^[a-zA-Z]/;
-   let messageError = document.getElementById('lastNameErrorMsg');
-   if (regexText.test(inputLastName.value)) {
-    messageError.innerHTML = "Valide"
-    }
-    else {
-    messageError.innerHTML = "Invalide";
-    }
-};
-////// ADRESS
-formUser.address.addEventListener ('change',function(){
-  validAddress(this)
-});
-const validAddress = function (inputAddress) {
-   // Fonction validation texte - regex
-   let regexAddress = new RegExp (/^[a-zA-Z0-9\s]*$/);
-   let messageError = document.getElementById('addressErrorMsg');
-   if (regexAddress.test(inputAddress.value)) {
-    messageError.innerHTML = "Valide"
-    }
-    else {
-    messageError.innerHTML = "Invalide";
-    }
-};
-////// CITY
-formUser.city.addEventListener ('change',function(){
-  validCity(this)
-});
-const validCity = function (inputCity) {
-   // Fonction validation texte - regex
-   let regexText = /^[a-zA-Z]/;
-   let messageError = document.getElementById('cityErrorMsg');
-   if (regexText.test(inputCity.value)) {
-    messageError.innerHTML = "Valide"
-    }
-    else {
-    messageError.innerHTML = "Invalide";
-    }
-};
-////// EMAIL
-formUser.email.addEventListener ('change',function(){
-  validEmail(this)
-});
-const validEmail = function (inputEmail) {
-  // Fonction validation email - regex
-  let regexEmail = new RegExp (/^[a-zA-Z0-9_.-]+@[a-z0-9]{2,}\.[a-z]{2,}$/);
-  // Récupération de la balise error
-  let messageError = document.getElementById('emailErrorMsg');
-  // Test de la regex email
-  if (regexEmail.test(inputEmail.value)) {
-    messageError.innerHTML = "Valide"
-  }
-  else {
-  messageError.innerHTML = "Adresse e-mail non valide"
-  }
 };
 
+// ------------------------ FORMULAIRE
+// Déclaration  <->  Variable formulaire et inputs
+const formUser = document.querySelector('.cart__order__form');
+const inputs = document.querySelectorAll('input');
+// ------------------------ FONCTIONS DU FORMULAIRE
 
-/////////////////// Formulaire
-
-function sendForm () {
-  formUser.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-/////////////////// Ajout du panier dans le tableau products
-    let productsOrder = [];
-    if (localStorage.getItem('cart')) {
-      let panier = JSON.parse(localStorage.getItem('cart'));
-      if (panier) {
-        panier.forEach((item) => {
-          if (item != null) {
-            productsOrder.push(item._id)
-          }
-        });
-      }
-    };
-/////////////////// Ajout du panier dans le tableau products
-    let contactObj = {
-      contact: {
-        firstName: formUser.firstName.value,
-        lastName: formUser.lastName.value,
-        address: formUser.address.value,
-        city: formUser.city.value,
-        email: formUser.email.value
-      },
-      products: productsOrder 
-    }
-    console.log(contactObj);
-
-    let orderOptions = {
-      method: 'POST',
-      body: JSON.stringify(contactObj),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }
-    fetch('http://localhost:3000/api/products/order', orderOptions)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      window.location.href = `/front/html/confirmation.html?orderId=${data.orderId}`;
-    })
+// Fonction  <-> Vérification des champs du formulaire
+inputs.forEach(input => {
+  input.addEventListener('change', e=> {
+    verifyInputs(input)
   })
-}
-sendForm();
-/*
-formUser.order.addEventListener ('click',function(e){
-  e.preventDefault();
- submitForm();
 });
+function verifyInputs(input) {
+  let test, msg;
+  const name = input.getAttribute('name');
+  const inputValue = input.value;
+  const errInput = document.querySelector(`#${name}ErrorMsg`)
 
-async function submitForm () {
-  let customerName = document.getElementById('lastName').value;
-  let customerFirstName = document.getElementById('firstName').value;
-  let customerCity = document.getElementById('city').value;
-  let customerAddress = document.getElementById('address').value;
-  let customerEmail = document.getElementById('email').value;
-  let products = [];
-  let contactObj;
-  if (customerEmail && customerName) {
-    contactObj = {
-      firstName: customerFirstName,
-      lastName: customerName,
-      address: customerAddress,
-      city: customerCity,
-      email: customerEmail
-    }
-  };
+  switch (name) {
+    case 'address':
+      test = /^[a-zA-ZÀ-ÿ0-9]*$/.test(inputValue);
+      msg = 'Champ incorrect';
+      break;
+    case 'email':
+      test = /^[a-zA-Z0-9_.-]+@[a-z0-9]{2,}\.[a-z]{2,}$/.test(inputValue);
+      msg = 'Champ incorrect';
+      break;
+    default:
+      test = /^[a-zA-ZÀ-ÿ]{2,}/.test(inputValue);
+      msg = 'Champ incorrect';
+  }
+  if (!test) {
+    errInput.textContent = msg;
+  }
+  return test;
+};
+
+// Fonction  <-> Envoi du formulaire
+function sendForm() {
+  // Ajout du panier dans le tableau products
+  let productsOrder = [];
   if (localStorage.getItem('cart')) {
     let panier = JSON.parse(localStorage.getItem('cart'));
     if (panier) {
       panier.forEach((item) => {
         if (item != null) {
-          products.push(item._id)
+          productsOrder.push(item._id)
         }
       });
     }
   };
-  const orderProducts = {
-    contactObj,
-    products
+  // Création de l'objet qui sera envoyé à l'API
+  let commandUser = {
+    contact: {
+      firstName: formUser.firstName.value,
+      lastName: formUser.lastName.value,
+      address: formUser.address.value,
+      city: formUser.city.value,
+      email: formUser.email.value
+    },
+    products: productsOrder 
   }
-  console.log('orderproducts', orderProducts);
-fetch('http://localhost:3000/api/products/order', {
-  method: "POST",
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({orderProducts})
-})
-.then((response) => {
-  if (response.ok) {
-    return response.json();
-
+  console.log(commandUser);
+  // Requête POST
+  let orderOptions = {
+    method: 'POST',
+    body: JSON.stringify(commandUser),
+    headers: {
+      "Content-Type": "application/json"
+    }
   }
-})
-
-
+  fetch('http://localhost:3000/api/products/order', orderOptions)
+  .then((res) => res.json())
+  .then((data) => {
+    console.log(data);
+    window.location.href = `/front/html/confirmation.html?orderId=${data.orderId}`;
+  })
 };
-
-*/
+formUser.addEventListener('submit', function (e) {
+  e.preventDefault();
+  sendForm();
+});

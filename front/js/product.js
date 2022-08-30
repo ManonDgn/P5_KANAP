@@ -1,14 +1,17 @@
-// -- Récupération de l'URL ID Produit
+// ------------------------ PRODUITS
+
+// -- Interface URL Search Params <-> Récupération de l'id des produits pour l'associer à l'URL
 const currentUrl = new URL (document.URL);
 const _id = currentUrl.searchParams.get('id');
 const idProductURL = 'http://localhost:3000/api/products/' + _id ;
 
-// -- Fonction d'affichage des produits selon leur ID
+// -- Fonction <-> Affichage des produits et de leurs caractéristiques en fonction de leur id sur leur page
 function displayProduct (){
     fetch(idProductURL)
     .then(response => response.json())
     .then(product => {
         JSON.stringify(product);
+// Insertion des caractéristiques sur chaque page produit
         let imgProd = document.querySelector('.item__img');
         let titleProd = document.getElementById('title');
         let priceProd = document.getElementById('price');
@@ -25,17 +28,16 @@ function displayProduct (){
             listeColorsProd.appendChild(colorOption)
         });
     });
-}
+};
 displayProduct();
 
+// ------------------------ PANIER
 
-//
-
-// -- Variable bouton et déclenchement fonction addProdToCart au clic
+// -- Déclaration <-> Variable bouton et déclenchement fonction d'ajout au panier au clic
 let buttonAddToCart = document.getElementById('addToCart');
 buttonAddToCart.addEventListener('click', addProdToCart);
 
-// -- Fonction d'ajout des produits au panier
+// -- Fonction <-> Ajout des produits au panier
 function addProdToCart (){
 // variables de l'objet produit
     let productQty = parseInt(document.getElementById('quantity').value);
