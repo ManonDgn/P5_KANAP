@@ -118,7 +118,7 @@ function verifyInputs(input) {
 
   switch (name) {
     case 'address':
-      test = /^[a-zA-ZÀ-ÿ0-9]*$/.test(inputValue);
+      test = /^\s*[0-9]{1,}+\s*[a-zA-ZÀ-ÿ]*$/.test(inputValue);
       msg = 'Champ incorrect';
       break;
     case 'email':
@@ -126,7 +126,7 @@ function verifyInputs(input) {
       msg = 'Champ incorrect';
       break;
     default:
-      test = /^[a-zA-ZÀ-ÿ]{2,}/.test(inputValue);
+      test = /^[a-zA-ZÀ-ÿ]{2,}$/.test(inputValue);
       msg = 'Champ incorrect';
   }
   if (!test) {
