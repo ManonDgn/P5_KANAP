@@ -4,7 +4,6 @@ const cart = JSON.parse(localStorage.getItem("cart"));
 // -- Logique du panier <-> Panier vide // Panier rempli
 let isCartEmpty = (cart == null || cart.length == 0) ? true : false;
 if (isCartEmpty) {
-  console.log('Votre panier est vide');
 } else {
   cart.forEach((item) => {
     const prodUrl = 'http://localhost:3000/api/products/' + item._id;
@@ -48,7 +47,6 @@ function displayProduct (product, productColor, productQty){
     container.appendChild(productEl);
     
 };
-
 // -- Fonction <-> Calcul des prix totaux selon la quantité et le prix de chaque produit du panier
 function calcTotalToPay () {
   let totalToPay = 0;
@@ -68,7 +66,6 @@ function calcTotalToPay () {
   });
 };
 calcTotalToPay();
-
 // -- Fonction <-> Modification de la quantité de chaque produit du panier
 function setQty(e) {
   let curInput = e.target;
@@ -80,7 +77,6 @@ function setQty(e) {
   //2- Rafraichir le panier
   refreshCart();
 };
-
 // -- Fonction <-> Suppression d'un produit du panier
 function deleteProduct(e) {
   let btn = e.target;
@@ -105,6 +101,7 @@ function getProductIndex(articleId) {
 // Déclaration  <->  Variable formulaire et inputs
 const formUser = document.querySelector('.cart__order__form');
 const inputs = document.querySelectorAll('input');
+
 // ------------------------ FONCTIONS DU FORMULAIRE
 
 // Fonction  <-> Vérification des champs du formulaire
@@ -137,7 +134,6 @@ function verifyInputs(input) {
   }
   return test;
 };
-
 // Fonction  <-> Envoi du formulaire
 function sendForm() {
   // Ajout du panier dans le tableau products
