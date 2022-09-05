@@ -13,6 +13,9 @@ if (isCartEmpty) {
      displayProduct (product, item.productColor, item.productQty);
      calcTotalToPay (product.price, product.productQty);
     })
+    .catch(function(err) {
+      console.log('Erreur :', err)
+    });
   })
 };
 
@@ -62,6 +65,9 @@ function calcTotalToPay () {
       let itemQtyItem = document.getElementById("totalQuantity");
       itemQty += item.productQty ;
       itemQtyItem.textContent = itemQty;
+    })
+    .catch(function(err) {
+      console.log('Erreur :', err)
     });
   });
 };
@@ -160,7 +166,6 @@ function sendForm() {
     },
     products: productsOrder 
   }
-  console.log(commandUser);
   // Requête POST
   let orderOptions = {
     method: 'POST',
@@ -172,9 +177,12 @@ function sendForm() {
   fetch('http://localhost:3000/api/products/order', orderOptions)
   .then((res) => res.json())
   .then((data) => {
-    console.log(data);
+    localStorage.clear();
     window.location.href = `/front/html/confirmation.html?orderId=${data.orderId}`;
   })
+  .catch(function(err) {
+    console.log('Erreur :', err)
+  });
 };
 formUser.addEventListener('submit', function (e) {
   e.preventDefault();

@@ -26,6 +26,9 @@ function displayProduct (){
             colorOption.textContent = color ;
             listeColorsProd.appendChild(colorOption)
         });
+    })
+    .catch(function(err) {
+        console.log('Erreur :', err)
     });
 };
 displayProduct();

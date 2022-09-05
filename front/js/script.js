@@ -22,6 +22,9 @@ function displayProdHome(){
             `
             container.appendChild(prod)
         }
+    })
+    .catch(function(err) {
+        console.log('Erreur :', err)
     });
 };
 displayProdHome();
