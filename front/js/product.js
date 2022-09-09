@@ -4,6 +4,7 @@
 const currentUrl = new URL (document.URL);
 const _id = currentUrl.searchParams.get('id');
 const idProductURL = 'http://localhost:3000/api/products/' + _id ;
+
 // -- Fonction <-> Affichage des produits et de leurs caractéristiques en fonction de leur id sur leur page
 function displayProduct (){
     fetch(idProductURL)
@@ -34,9 +35,11 @@ function displayProduct (){
 displayProduct();
 
 // ------------------------ PANIER
+
 // -- Déclaration <-> Variable bouton et déclenchement fonction d'ajout au panier au clic
 const buttonAddToCart = document.getElementById('addToCart');
 buttonAddToCart.addEventListener('click', addProdToCart);
+
 // -- Fonction <-> Ajout des produits au panier
 function addProdToCart (){
 // variables de l'objet produit

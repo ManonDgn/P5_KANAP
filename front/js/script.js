@@ -1,4 +1,4 @@
-// -- Requête API <-> Affiche tous les produits du localhost sur la page d'accueil
+// -- Fonction Requête API <-> Affiche tous les produits du localhost sur la page d'accueil
 function displayProdHome(){
     let baseURL ='http://localhost:3000/api/products'
     fetch(baseURL)
@@ -8,10 +8,8 @@ function displayProdHome(){
 // Création d'une boucle pour afficher tous les produits dans leur article respectif
         for(let product of products){
             let container = document.querySelector('section.items');
-            let prod = document.createElement('article');
-            prod.classList.add('items')
 // Insertion des produits sur la page
-            prod.innerHTML = `   
+            container.innerHTML += `   
             <a href="product.html?id=${product._id}">
             <article>
             <img src="${product.imageUrl}" alt="${product.altTxt}">
@@ -20,7 +18,6 @@ function displayProdHome(){
             </article>
             </a>
             `
-            container.appendChild(prod)
         }
     })
     .catch(function(err) {

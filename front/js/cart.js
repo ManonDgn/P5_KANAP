@@ -1,6 +1,8 @@
 // ------------------------ PANIER
+
 // -- Récupération <-> Données panier dans le localStorage 
 const cart = JSON.parse(localStorage.getItem("cart"));
+
 // -- Logique du panier <-> Panier vide // Panier rempli
 let isCartEmpty = (cart == null || cart.length == 0) ? true : false;
 if (isCartEmpty) {
@@ -20,7 +22,9 @@ if (isCartEmpty) {
 };
 
 // ------------------------ FONCTIONS DU PANIER
+
 // -- Fonction <-> Affichage des produits sur la page panier
+
 function displayProduct (product, productColor, productQty){
   const productEl = document.createElement('article');
     productEl.classList.add('cart__item');
@@ -51,6 +55,7 @@ function displayProduct (product, productColor, productQty){
     
 };
 // -- Fonction <-> Calcul des prix totaux selon la quantité et le prix de chaque produit du panier
+
 function calcTotalToPay () {
   let totalToPay = 0;
   let itemQty = 0;
@@ -73,6 +78,7 @@ function calcTotalToPay () {
 };
 calcTotalToPay();
 // -- Fonction <-> Modification de la quantité de chaque produit du panier
+
 function setQty(e) {
   let curInput = e.target;
   let newQty = curInput.value;
@@ -84,6 +90,7 @@ function setQty(e) {
   refreshCart();
 };
 // -- Fonction <-> Suppression d'un produit du panier
+
 function deleteProduct(e) {
   let btn = e.target;
   let closestArticle = btn.closest("article");
@@ -93,17 +100,19 @@ function deleteProduct(e) {
   closestArticle.remove();
 };
 // -- Fonction <-> Recharger les données du panier et la page avec les modifications
+
 function refreshCart () {
   localStorage.setItem('cart', JSON.stringify(cart)); 
   calcTotalToPay();
-  location.reload();
 };
 // -- Fonction <-> Récupérer les produits du panier via leur index
+
 function getProductIndex(articleId) {
   return cart.findIndex(item => item._id == articleId)
 };
 
 // ------------------------ FORMULAIRE
+
 // Déclaration  <->  Variable formulaire et inputs
 const formUser = document.querySelector('.cart__order__form');
 const inputs = document.querySelectorAll('input');
@@ -111,6 +120,7 @@ const inputs = document.querySelectorAll('input');
 // ------------------------ FONCTIONS DU FORMULAIRE
 
 // Fonction  <-> Vérification des champs du formulaire
+
 inputs.forEach(input => {
   input.addEventListener('change', e=> {
     verifyInputs(input)
@@ -142,6 +152,7 @@ function verifyInputs(input) {
   return test;
 };
 // Fonction  <-> Envoi du formulaire
+
 function sendForm() {
   // Ajout du panier dans le tableau products
   let productsOrder = [];
